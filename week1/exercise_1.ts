@@ -8,7 +8,7 @@ function tinhTongMangSoNguyen(arr: number[]) {
     tong += arr[i];
   }
 
-  // const tong = arr.reduce((acc, currentValue) => acc + currentValue, 0);
+  // const tong = arr.reduce((sum, currentValue) => sum + currentValue, 0);
   return tong;
 }
 
