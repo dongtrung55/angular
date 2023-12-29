@@ -10,7 +10,7 @@ class TicTacToe {
     private board: Board = Array(9).fill(null);
 
     private renderBoard(): void {
-        const appElement = document.getElementById('app');
+        const appElement = document.getElementById('content');
         if (!appElement) return;
 
         appElement.innerHTML = '';

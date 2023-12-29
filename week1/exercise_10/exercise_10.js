@@ -10,7 +10,7 @@ var TicTacToe = /** @class */ (function () {
     }
     TicTacToe.prototype.renderBoard = function () {
         var _this = this;
-        var appElement = document.getElementById('app');
+        var appElement = document.getElementById('content');
         if (!appElement)
             return;
         appElement.innerHTML = '';
