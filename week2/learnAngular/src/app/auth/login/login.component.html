@@ -1,0 +1,31 @@
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-3">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-body">
+                    <form>
+                        <div class="form-floating mb-3">
+                            <label for="inputEmail">Email address</label>
+                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="inputPassword">Password</label>
+                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                            <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <a class="small text-dark" [routerLink]="['/password']">Forgot Password?</a>
+                            <button class="btn btn-primary border-" (click)="login()">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small"><a class="text-dark" [routerLink]="['/register']">Need an account? Sign up!</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
