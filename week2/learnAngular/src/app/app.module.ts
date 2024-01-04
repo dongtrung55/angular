@@ -8,11 +8,11 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { LoginComponent } from './auth/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { AdminComponent } from './admin/admin.component';
 import { CartComponent } from './cart/cart/cart.component';
 import { CheckoutComponent } from './cart/checkout/checkout.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,6 @@ import { CheckoutComponent } from './cart/checkout/checkout.component';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    LoginComponent,
     PageNotFoundComponent,
     AdminComponent,
     CartComponent,
@@ -30,7 +29,8 @@ import { CheckoutComponent } from './cart/checkout/checkout.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

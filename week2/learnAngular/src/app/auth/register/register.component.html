@@ -1,1 +1,53 @@
-<p>register works!</p>
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-body">
+                    <form (ngSubmit)="onRegister()">
+                        <div *ngIf="errorMessage" class="error-message bg-danger text-light p-2 mb-3 small">{{ errorMessage }}</div>
+                        <div class="form-floating mb-3">
+                            <label for="userName">User name</label>
+                            <input class="form-control" id="userName" name="userName" type="text" placeholder="User name" [(ngModel)]="userName"  (keyup)="validateUserName()" required/>
+                            <div *ngIf="errorMessageUserName" class="small text-danger mt-1 font-italic">{{ errorMessageUserName }}</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="password">Password</label>
+                            <input class="form-control" id="password" type="password" name="password" placeholder="Password" [(ngModel)]="password"  (keyup)="validatePassword()" required/>
+                            <div *ngIf="errorMessagePassword" class="small text-danger mt-1 font-italic">{{ errorMessagePassword }}</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="email">Email address</label>
+                            <input class="form-control" id="email" name="email" type="email" placeholder="Email" [(ngModel)]="email" (keyup)="validateEmail()" required/>
+                            <div *ngIf="errorMessageEmail" class="small text-danger mt-1 font-italic">{{ errorMessageEmail }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="form-floating mb-3 col-lg-6">
+                                <label for="firstName">First Name</label>
+                                <input class="form-control" id="firstName" type="text" name="firstName" placeholder="First Name" [(ngModel)]="firstName"  (keyup)="validateFirstName()" required/>
+                                <div *ngIf="errorMessageFirstName" class="small text-danger mt-1 font-italic">{{ errorMessageFirstName }}</div>
+                            </div>
+                            <div class="form-floating mb-3 col-lg-6">
+                                <label for="lastName">Last Name</label>
+                                <input class="form-control" id="lastName" type="text" name="lastName" placeholder="Last Name" [(ngModel)]="lastName"  (keyup)="validateLastName()" required/>
+                                <div *ngIf="errorMessageLastName" class="small text-danger mt-1 font-italic">{{ errorMessageLastName }}</div>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="phone">Phone</label>
+                            <input class="form-control" id="phone" name="phone" type="text" placeholder="phone" [(ngModel)]="phone"  (keyup)="validatePhone()" required/>
+                            <div *ngIf="errorMessagePhone" class="small text-danger mt-1 font-italic">{{ errorMessagePhone }}</div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="address">Address</label>
+                            <input class="form-control" id="address" name="address" type="text" placeholder="Address" [(ngModel)]="address"  (keyup)="validateAddress()" required/>
+                            <div *ngIf="errorMessageAddress" class="small text-danger mt-1 font-italic">{{ errorMessageAddress }}</div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <button class="btn btn-primary border-" type="submit">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

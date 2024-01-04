@@ -1,6 +1,7 @@
 [
     {
         "user_id": "1",
+        "username": "admin",
         "email": "admin@gmail.com",
         "password": "Onnet@123",
         "first_name": "Dong",
@@ -16,6 +17,7 @@
       },
       {
         "user_id": "2",
+        "username": "test2",
         "email": "test2@test.com",
         "password": "Admin$123",
         "first_name": "Hello2",
@@ -31,6 +33,7 @@
       },
       {
         "user_id": "3",
+        "username": "test3",
         "email": "test3@test.com",
         "password": "Admin$123",
         "first_name": "Hello3",
@@ -46,6 +49,7 @@
       },
       {
         "user_id": "4",
+        "username": "test4",
         "email": "test4@test.com",
         "password": "Admin$123",
         "first_name": "Hello4",
@@ -61,6 +65,7 @@
       },
       {
         "user_id": "5",
+        "username": "test5",
         "email": "test5@test.com",
         "password": "Admin$123",
         "first_name": "Hello5",
@@ -76,6 +81,7 @@
       },
       {
         "user_id": "6",
+        "username": "test6",
         "email": "test6@test.com",
         "password": "Admin$123",
         "first_name": "Hello6",
@@ -91,6 +97,7 @@
       },
       {
         "user_id": "7",
+        "username": "test7",
         "email": "test7@test.com",
         "password": "Admin$123",
         "first_name": "Hello7",
@@ -106,6 +113,7 @@
       },
       {
         "user_id": "8",
+        "username": "test8",
         "email": "test8@test.com",
         "password": "Admin$123",
         "first_name": "Hello8",
