@@ -27,11 +27,22 @@ export class AuthGuard implements CanActivate {
     return this.authService.isLoggedIn().pipe(
       take(1),
       map((isLoggedIn: boolean) => {
-        if (!isLoggedIn) {
-          this.router.navigate(['/login']);
+        if (isLoggedIn) {
+          // Check if the user has the 'administrator' role
+          const userInLocalStorage = localStorage.getItem('currentUser');
+          if (userInLocalStorage !== null) {
+            const userObject = JSON.parse(userInLocalStorage);
+            if (userObject['role'] === 'administrator') {
+              return true; // User has 'admin' role, allow access
+            }
+          }
+          // Redirect to home if the user is not an admin
+          this.router.navigate(['/home']);
           return false;
         }
-        return true;
+        // Redirect to login if the user is not logged in
+        this.router.navigate(['/login']);
+        return false;
       })
     );
   }

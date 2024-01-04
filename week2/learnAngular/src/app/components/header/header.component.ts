@@ -15,17 +15,20 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn();
-    this.authService.getName().subscribe(
-      (name) => {
-        this.name = name;
-      },
-      (error) => {
-        console.error('Error fetching user name:', error);
+    this.isLoggedIn$.subscribe((isLogged) => {
+      if (isLogged) {
+        this.authService.getName().subscribe((userName) => {
+          this.name = userName;
+        });
       }
-    );
+    });
   }
 
   public logout(): void {
     this.authService.logout();
+  }
+
+  public isAdmin(): boolean {
+    return this.authService.getUserRoles().includes('admin');
   }
 }

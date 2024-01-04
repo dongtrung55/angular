@@ -11,6 +11,7 @@ export class AuthService {
     false
   );
   users: any[] = [];
+  private currentUser: any = null;
 
   constructor(private router: Router, private http: HttpClient) {
     this.checkLocalStorage();
@@ -46,6 +47,16 @@ export class AuthService {
     );
   }
 
+  public getUserRoles(): string {
+    const userInLocalStorage = localStorage.getItem('currentUser');
+    if (userInLocalStorage !== null) {
+      const userObject = JSON.parse(userInLocalStorage);
+      return userObject['role'];
+    } else {
+      return this.currentUser ? this.currentUser['role'] : '';
+    }
+  }
+
   public logout(): void {
     localStorage.removeItem('currentUser');
     this.loggedIn.next(false);
@@ -58,6 +69,7 @@ export class AuthService {
     const formattedDateTime = currentDate.toISOString();
 
     if (user) {
+      this.currentUser = user;
       this.loggedIn.next(true);
       localStorage.setItem('currentUser', JSON.stringify(user));
       remember ? localStorage.setItem('remember', JSON.stringify({ email: user.email, password: user.password })) : localStorage.removeItem('remember');
@@ -77,10 +89,12 @@ export class AuthService {
 
   public getName(): Observable<string | null> {
     const userInLocalStorage = localStorage.getItem('currentUser');
-
     if (userInLocalStorage !== null) {
       const userObject = JSON.parse(userInLocalStorage);
       const userName = userObject['first_name'] + ' ' +userObject['last_name'];
+      return of(userName);
+    } else if(this.currentUser !== null) {
+      const userName =  this.currentUser['first_name'] + ' ' + this.currentUser['last_name'];
       return of(userName);
     } else {
       return of(null);

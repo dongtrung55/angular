@@ -109,7 +109,7 @@
                                 <ul class="dropdown-menu rounded-0 m-0">
                                     <li><a [routerLink]="['/profile']" class="dropdown-item"
                                         [routerLinkActive]="'active'">Profile</a></li>
-                                    <li><a [routerLink]="['/admin']" class="dropdown-item"
+                                    <li *ngIf="isAdmin()"><a [routerLink]="['/admin']" class="dropdown-item"
                                         [routerLinkActive]="'active'">Admin</a></li>
                                     <li><a [routerLink]="['/logout']" class="dropdown-item" (click)="logout()">Logout</a></li>
                                 </ul>
