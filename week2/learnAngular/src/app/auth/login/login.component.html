@@ -3,22 +3,25 @@
         <div class="col-lg-3">
             <div class="card shadow-lg border-0 rounded-lg">
                 <div class="card-body">
-                    <form>
+                    <form (ngSubmit)="onLogin()">
+                        <div *ngIf="errorMessage" class="error-message bg-danger text-light p-2 mb-3 small">{{ errorMessage }}</div>
                         <div class="form-floating mb-3">
-                            <label for="inputEmail">Email address</label>
-                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                            <label for="email">Email address</label>
+                            <input class="form-control" id="email" name="email" type="email" placeholder="Email" [(ngModel)]="email" (keyup)="onKeyUp($event)"/>
+                            <div *ngIf="errorMessageEmail" class="small text-danger mt-1 font-italic">{{ errorMessageEmail }}</div>
                         </div>
                         <div class="form-floating mb-3">
-                            <label for="inputPassword">Password</label>
-                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                            <label for="password">Password</label>
+                            <input class="form-control" id="password" type="password" name="password" placeholder="Password" [(ngModel)]="password" />
+                            <div *ngIf="errorMessagePassword" class="small text-danger mt-1 font-italic">{{ errorMessagePassword }}</div>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                            <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
+                            <input class="form-check-input cursor-pointer" id="remember" name="remember" type="checkbox" value=""  [(ngModel)]="remember" />
+                            <label class="form-check-label small cursor-pointer" for="remember">Remember Password</label>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                             <a class="small text-dark" [routerLink]="['/password']">Forgot Password?</a>
-                            <button class="btn btn-primary border-" (click)="login()">Login</button>
+                            <button class="btn btn-primary border-" type="submit">Login</button>
                         </div>
                     </form>
                 </div>

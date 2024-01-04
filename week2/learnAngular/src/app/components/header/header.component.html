@@ -96,15 +96,24 @@
                             <a [routerLink]="['/contact']" [routerLinkActive]="'active'"
                                 class="nav-item nav-link">Contact</a>
                         </div>
-                        <div class="navbar-nav ml-auto py-0" *ngIf="!(isLoggedIn$ | async) as isLoggedIn">
+                        <div class="navbar-nav ml-auto py-0" *ngIf="!(isLoggedIn$ | async) as isNotLoggedIn">
                             <a [routerLink]="['/login']" [routerLinkActive]="'active'"
                                 class="nav-item nav-link">Login</a>
                             <a [routerLink]="['/register']" [routerLinkActive]="'active'"
                                 class="nav-item nav-link">Register</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0" *ngIf="isLoggedIn$ | async as isLoggedIn">
-                            <button class="nav-item nav-link border-0 p-0 bg-transparent"
-                                (click)="logout()">Logout</button>
+                            <div class="nav-item dropdown admin-bar-my-account">
+                                <a href="#" class="nav-link dropdown-toggle dropdown-toggle-custom" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">Hi, {{ name | uppercase }}</a>
+                                <ul class="dropdown-menu rounded-0 m-0">
+                                    <li><a [routerLink]="['/profile']" class="dropdown-item"
+                                        [routerLinkActive]="'active'">Profile</a></li>
+                                    <li><a [routerLink]="['/admin']" class="dropdown-item"
+                                        [routerLinkActive]="'active'">Admin</a></li>
+                                    <li><a [routerLink]="['/logout']" class="dropdown-item" (click)="logout()">Logout</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </nav>

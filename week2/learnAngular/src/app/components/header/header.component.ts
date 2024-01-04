@@ -8,12 +8,21 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  name: string | null = null;
   public isLoggedIn$: Observable<boolean> = new Observable<boolean>;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn();
+    this.authService.getName().subscribe(
+      (name) => {
+        this.name = name;
+      },
+      (error) => {
+        console.error('Error fetching user name:', error);
+      }
+    );
   }
 
   public logout(): void {
