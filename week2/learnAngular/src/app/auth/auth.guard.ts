@@ -33,7 +33,12 @@ export class AuthGuard implements CanActivate {
           if (userInLocalStorage !== null) {
             const userObject = JSON.parse(userInLocalStorage);
             if (userObject['role'] === 'administrator') {
-              return true; // User has 'admin' role, allow access
+              return true;
+            }
+
+            if (state.url.includes('forgot-password') || state.url.includes('register')) {
+              this.router.navigate(['/home']); // Redirect to home
+              return false;
             }
           }
           // Redirect to home if the user is not an admin
