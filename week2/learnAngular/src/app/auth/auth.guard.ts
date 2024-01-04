@@ -36,10 +36,11 @@ export class AuthGuard implements CanActivate {
               return true;
             }
 
-            if (state.url.includes('forgot-password') || state.url.includes('register')) {
+            if (state.url.includes('forgot-password') || state.url.includes('register') || state.url.includes('login')) {
               this.router.navigate(['/home']); // Redirect to home
               return false;
             }
+
           }
           // Redirect to home if the user is not an admin
           this.router.navigate(['/home']);
