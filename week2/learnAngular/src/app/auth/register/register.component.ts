@@ -156,6 +156,8 @@ export class RegisterComponent implements OnInit {
       "password": this.password,
       "first_name": this.firstName,
       "last_name": this.lastName,
+      "phone": this.phone,
+      "address": this.address,
       "last_ip": "",
       "role": "customer",
       "logins_count": 0,
@@ -213,7 +215,7 @@ export class RegisterComponent implements OnInit {
     }),
     map((users) => {
       // Generate a new user_id
-      user.id = (users.length + 1).toString();
+      user.id = (users.length + 2).toString();
       users.push(user);
 
       // Write updated data back to the file
