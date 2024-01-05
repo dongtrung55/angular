@@ -13,6 +13,7 @@ import { AdminComponent } from './admin/admin.component';
 import { CartComponent } from './cart/cart/cart.component';
 import { CheckoutComponent } from './cart/checkout/checkout.component';
 import { AuthModule } from './auth/auth.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    AuthModule
+    AuthModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

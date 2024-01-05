@@ -1,78 +1,187 @@
 <div class="container-fluid">
-    <div class="row border-top px-xl-5">
-        <div class="col-12 mt-4 mt-lg-5 mb-4 mb-lg-5">
-            <div class="d-flex justify-content-between mb-3">
-                <h2>List Users</h2>
-                <button type="button" class="btn btn-primary border-0" data-toggle="modal" data-target="#exampleModalCenter">
-                    <i class="fas fa-user-plus"></i> Add
-                  </button>
-            </div>
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col" style="width: 250px;">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mdo</td>
-                    <td>
-                        <div class="d-flex" style="gap: 10px;">
-                            <button type="button" class="btn btn-primary border-0"><i class="fas fa-user-edit"></i> Edit</button>
-                            <button type="button" class="btn btn-primary border-0"><i class="fas fa-user-slash"></i> Remove</button>
-                        </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+  <div class="row border-top px-xl-5">
+    <div class="col-12 mt-4 mt-lg-5 mb-4 mb-lg-5">
+      <div class="d-flex justify-content-between mb-3">
+        <h2>List Users</h2>
+        <button type="button" class="btn btn-primary border-0" data-toggle="modal" data-target="#exampleModalCenter" (click)="editUserText(null)">
+          <i class="fas fa-user-plus"></i> Add
+        </button>
+      </div>
+      <div style="overflow: hidden;overflow-x: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col" style="width: 250px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let user of paginatedUsers; let i = index">
+              <th scope="row">{{ i + itemsPerPage * currentPage - 9 }}</th>
+              <td>{{ user.first_name }}  {{ user.last_name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.phone }}</td>
+              <td>
+                <div class="d-flex" style="gap: 10px;">
+                  <button type="button" class="btn btn-primary border-0" (click)="editUser(user)" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-user-edit"></i> Edit</button>
+                  <button type="button" class="btn btn-primary border-0" data-toggle="modal" [attr.data-target]="'#removeModal' + (i + 1)"><i class="fas fa-user-slash"></i> Remove</button>
+                </div>
+                <div class="modal fade" [attr.id]="'removeModal' + (i + 1)" tabindex="-1" role="dialog" [attr.aria-labelledby]="'removeModalTitle' + (i + 1)" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Confirm deletion of "{{ user.first_name }}  {{ user.last_name }}"?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">
+                          Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" (click)="removeUser(user)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-              <div class="d-flex justify-content-center">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left fa-fw"></i></a></li>
-                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right fa-fw"></i></a></li>
-                    </ul>
-                  </nav>
-              </div>
-        </div>
-    </div>
-    <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Add User</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                  <label for="userName" class="col-form-label">User Name:</label>
-                  <input type="text" class="form-control" id="userName" name="userName" placeholder="User name">
-                </div>
-                <div class="form-group">
-                  <label for="address" class="col-form-label">Address:</label>
-                  <input type="text" class="form-control" id="address" name="address" placeholder="Address">
-                </div>
-              </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button>
-        </div>
+      <div class="d-flex justify-content-center">
+        <nav *ngIf="totalPages > 1">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1" [class.cursor-pointer]="currentPage !== 1">
+              <a class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" *ngFor="let page of pages" [class.active]="currentPage === page" [class.cursor-pointer]="currentPage !== page">
+              <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages" [class.cursor-pointer]="currentPage !== totalPages">
+              <a class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <form (ngSubmit)="onRegister()">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">{{ textTitleAddEdit }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="errorMessage" class="error-message bg-danger text-light p-2 mb-3 small">{{ errorMessage }}</div>
+            <div class="form-floating mb-3">
+              <label for="userName">User name</label>
+              <input class="form-control"[attr.disabled]="isEditMode === true" id="userName" name="userName" type="text" placeholder="User name"
+                [(ngModel)]="userName" (keyup)="validateUserName()" required />
+              <div *ngIf="errorMessageUserName" class="small text-danger mt-1 font-italic">{{ errorMessageUserName }}
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="password">Password</label>
+              <input class="form-control" id="password" type="password" name="password" placeholder="Password"
+                [(ngModel)]="password" (keyup)="validatePassword()" required />
+              <div *ngIf="errorMessagePassword" class="small text-danger mt-1 font-italic">{{ errorMessagePassword }}
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="email">Email address</label>
+              <input class="form-control" id="email" name="email" type="email" placeholder="Email" [(ngModel)]="email"
+                (keyup)="validateEmail()" required />
+              <div *ngIf="errorMessageEmail" class="small text-danger mt-1 font-italic">{{ errorMessageEmail }}</div>
+            </div>
+            <div class="row">
+              <div class="form-floating mb-3 col-lg-6">
+                <label for="firstName">First Name</label>
+                <input class="form-control" id="firstName" type="text" name="firstName" placeholder="First Name"
+                  [(ngModel)]="firstName" (keyup)="validateFirstName()" required />
+                <div *ngIf="errorMessageFirstName" class="small text-danger mt-1 font-italic">{{ errorMessageFirstName
+                  }}</div>
+              </div>
+              <div class="form-floating mb-3 col-lg-6">
+                <label for="lastName">Last Name</label>
+                <input class="form-control" id="lastName" type="text" name="lastName" placeholder="Last Name"
+                  [(ngModel)]="lastName" (keyup)="validateLastName()" required />
+                <div *ngIf="errorMessageLastName" class="small text-danger mt-1 font-italic">{{ errorMessageLastName }}
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="phone">Phone</label>
+              <input class="form-control" id="phone" name="phone" type="text" placeholder="phone" [(ngModel)]="phone"
+                (keyup)="validatePhone()" required />
+              <div *ngIf="errorMessagePhone" class="small text-danger mt-1 font-italic">{{ errorMessagePhone }}</div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="address">Address</label>
+              <input class="form-control" id="address" name="address" type="text" placeholder="Address"
+                [(ngModel)]="address" (keyup)="validateAddress()" required />
+              <div *ngIf="errorMessageAddress" class="small text-danger mt-1 font-italic">{{ errorMessageAddress }}
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="role">Select Role:</label>
+              <select class="form-control cursor-pointer" id="role" name="role" [(ngModel)]="selectedRole">
+                <option *ngFor="let role of roles | keyvalue" [value]="role.key">{{ role.value }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" type="submit" [innerHTML]="textBtnAddEdit"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- success -->
+<button type="button" id="showSuccess" class="btn btn-primary d-none" data-toggle="modal" data-target="#success">
+  btn Success
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="successTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 300px;">
+    <div class="modal-content">
+      <div class="modal-body d-flex justify-content-center flex-column align-items-center">
+        <button type="button" class="close pb-1 pl-2 pr-2 pt-1" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 3px; top: 3px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none" class="mb-3">
+          <g clip-path="url(#clip0_985_64659)">
+            <path d="M39.2325 12.3418C40.4273 13.9087 41.3577 15.6128 42.0824 17.5029C43.5808 16.9545 45.0498 16.4256 46.5972 15.8576C44.8148 11.1176 41.9061 7.33732 37.7831 4.3797C36.8625 5.69202 35.9615 6.97496 35.0311 8.30687C36.6275 9.47229 38.0377 10.7944 39.2325 12.3418Z" fill="#12B76A"/>
+            <path d="M32.1421 6.60317C32.808 5.18312 33.4642 3.76307 34.1693 2.25489C26.4423 -0.996537 18.9111 -0.839842 11.713 3.43989C4.74982 7.58252 0.969551 13.8797 0 21.9887C1.65509 22.1356 3.22204 22.2727 4.7792 22.4098C5.63123 10.1582 19.1658 0.766282 32.1421 6.60317Z" fill="#12B76A"/>
+            <path d="M4.70085 25.7686C3.21225 25.8959 1.66488 26.033 0.127312 26.1604C0.489669 35.9538 9.02955 46.9616 21.8981 47.9997C22.0352 46.4132 22.1723 44.8658 22.2997 43.3576C12.2418 41.6927 6.40491 35.8559 4.70085 25.7686Z" fill="#12B76A"/>
+            <path d="M39.399 24.1233C39.399 15.6324 32.4946 8.72803 24.0037 8.72803C15.5128 8.72803 8.60844 15.6324 8.60844 24.1233C8.60844 32.6142 15.5128 39.5186 24.0037 39.5186C32.4946 39.5186 39.399 32.6142 39.399 24.1233ZM24.9439 27.3454L22.1234 30.1561L19.3127 27.3356L16.6097 24.613L19.4302 21.8023L22.1332 24.5248L28.5968 18.0906L31.4076 20.9111L24.9439 27.3454Z" fill="#12B76A"/>
+            <path d="M47.6549 19.9219C46.1173 20.1864 44.5602 20.4606 42.954 20.7348C43.7865 26.3464 42.6308 31.3901 39.2031 35.8265C35.795 40.2335 31.2411 42.6525 25.6588 43.2695C25.7959 44.856 25.933 46.3936 26.0603 47.941C37.7341 47.5296 50.2501 35.8069 47.6549 19.9219Z" fill="#12B76A"/>
+          </g>
+          <defs>
+            <clipPath id="clip0_985_64659">
+              <rect width="48" height="48" fill="white"/>
+            </clipPath>
+          </defs>
+        </svg>
+        <h5 class="text-success">{{textSuccess}}</h5>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

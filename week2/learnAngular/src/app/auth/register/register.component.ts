@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -10,6 +10,7 @@ import { throwError } from 'rxjs';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  titleForm = 'Register Form';
   userName: string = '';
   email: string = '';
   password: string = '';
@@ -26,9 +27,9 @@ export class RegisterComponent implements OnInit {
   errorMessagePhone: string = '';
   errorMessageAddress: string = '';
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   private isEmailValid(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
   public validateEmail(): void {
     if (!this.email) {
-      this.errorMessageEmail = 'Please enter user name.';
+      this.errorMessageEmail = 'Please enter email.';
     } else if (!this.isEmailValid(this.email)) {
       this.errorMessageEmail = 'Please enter a valid email address.';
     } else {
@@ -148,27 +149,50 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    
+    //insert user
+    let user: any = {
+      "username": this.userName,
+      "email": this.email,
+      "password": this.password,
+      "first_name": this.firstName,
+      "last_name": this.lastName,
+      "last_ip": "",
+      "role": "customer",
+      "logins_count": 0,
+      "created_at": (new Date()).toISOString(),
+      "updated_at": "",
+      "last_login": "",
+      "email_verified": false
+    };
+
+    this.addUser(user).subscribe(
+      () => {
+        console.log('Users updated successfully.');
+      },
+      error => {
+        console.error('Error updating users:', error);
+      }
+    );
   }
 
   private hasValidationErrors(): boolean {
+    let hasValidationErrors = false;
     if (
-      this.errorMessageUserName === '' ||
-      this.errorMessageEmail === '' ||
-      this.errorMessagePassword === '' ||
-      this.errorMessageFirstName === '' ||
-      this.errorMessageLastName === '' ||
-      this.errorMessagePhone === '' ||
-      this.errorMessageAddress === ''
+      this.errorMessageUserName !== '' ||
+      this.errorMessageEmail !== '' ||
+      this.errorMessagePassword !== '' ||
+      this.errorMessageFirstName !== '' ||
+      this.errorMessageLastName !== '' ||
+      this.errorMessagePhone !== '' ||
+      this.errorMessageAddress !== ''
     ) {
-      return false;
-    } else {
-      return true;
+      hasValidationErrors = true;
     }
+    return hasValidationErrors;
   }
 
   private checkFieldExists(fieldName: string, fieldValue: string) {
-    const url = './assets/users.json';
+    const url = 'http://localhost:3000/users';
 
     return this.http.get<any[]>(url).pipe(
       catchError((error) => {
@@ -178,4 +202,29 @@ export class RegisterComponent implements OnInit {
       map((users) => users.some((user) => user[fieldName] === fieldValue))
     );
   }
+
+  private addUser(user: any): Observable<any> {
+  const apiUrl = 'http://localhost:3000/users';
+
+  return this.http.get<any[]>(apiUrl).pipe(
+    catchError((error) => {
+      console.error('Error reading users.json:', error);
+      return throwError(error);
+    }),
+    map((users) => {
+      // Generate a new user_id
+      user.id = (users.length + 1).toString();
+      users.push(user);
+
+      // Write updated data back to the file
+      return this.http.post<any>(apiUrl, user).pipe(
+        catchError((error) => {
+          console.error('Error adding user:', error);
+          return throwError(error);
+        })
+      );
+    })
+  );
+}
+
 }

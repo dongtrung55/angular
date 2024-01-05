@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   private loadUsers(): void {
-    this.http.get<any[]>('./assets/users.json').subscribe(
+    this.http.get<any[]>('http://localhost:3000/users').subscribe(
       data => {
         this.users = data;
       },
@@ -36,8 +36,8 @@ export class AuthService {
     );
   }
 
-  private saveUsersToFile(): void {
-    this.http.put('./assets/users.json', this.users).subscribe(
+  private saveUsersToFile(user: any): void {
+    this.http.put('http://localhost:3000/users/' + user.id, user).subscribe(
       () => {
         console.log('Users updated successfully.');
       },
@@ -75,7 +75,7 @@ export class AuthService {
       remember ? localStorage.setItem('remember', JSON.stringify({ email: user.email, password: user.password })) : localStorage.removeItem('remember');
       this.router.navigate(['/home']);
       user.last_login = formattedDateTime;
-      // this.saveUsersToFile();
+      this.saveUsersToFile(user);
       return of(true);
     } else {
       this.loggedIn.next(false);
