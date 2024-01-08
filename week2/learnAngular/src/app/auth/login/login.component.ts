@@ -10,9 +10,11 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   remember: boolean = false;
-  errorMessage: string = '';
-  errorMessageEmail: string = '';
-  errorMessagePassword: string = '';
+  errorMessages: {[key: string]: string} = {
+    email: '',
+    password: '',
+    general: ''
+  };
 
   constructor(private authService: AuthService) { }
 
@@ -35,43 +37,34 @@ export class LoginComponent implements OnInit {
   public onKeyUp(event: any): void {
     const inputValue = event.target.value;
     if (!this.isEmailValid(inputValue)) {
-      this.errorMessageEmail = 'Please enter a valid email address.';
+      this.errorMessages['email'] = 'Please enter a valid email address.';
     } else {
-      this.errorMessageEmail = '';
+      this.errorMessages['email'] = '';
     }
   }
 
   public onLogin(): void {
-    if (!this.email) {
-      this.errorMessageEmail = 'Please enter email.';
-    } else {
-      this.errorMessageEmail = '';
-    }
-    
-    if (!this.password) {
-      this.errorMessagePassword = 'Please enter password.';
-    } else {
-      this.errorMessagePassword = '';
-    }
-    
+    this.errorMessages['email'] = !this.email ? 'Please enter email.' : '';
+    this.errorMessages['password'] = !this.password ? 'Please enter password.' : '';
+
     if (!this.email || !this.password) {
       return;
     }
 
     if (!this.isEmailValid(this.email)) {
-      this.errorMessageEmail = 'Please enter a valid email address.';
+      this.errorMessages['email'] = 'Please enter a valid email address.';
       return;
     }
 
     this.authService.login(this.email, this.password, this.remember).subscribe(
       (success) => {
         if (!success) {
-          this.errorMessage = 'Invalid email or password';
+          this.errorMessages['general'] = 'Invalid email or password';
         }
       },
       (error) => {
         console.error('Error during login:', error);
-        this.errorMessage = 'An error occurred during login';
+        this.errorMessages['general'] = 'An error occurred during login';
       }
     );
   }

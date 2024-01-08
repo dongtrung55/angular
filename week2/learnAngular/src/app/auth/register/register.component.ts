@@ -18,14 +18,24 @@ export class RegisterComponent implements OnInit {
   lastName: string = '';
   phone: string = '';
   address: string = '';
-  errorMessage: string = '';
-  errorMessageEmail: string = '';
-  errorMessagePassword: string = '';
-  errorMessageUserName: string = '';
-  errorMessageFirstName: string = '';
-  errorMessageLastName: string = '';
-  errorMessagePhone: string = '';
-  errorMessageAddress: string = '';
+  // errorMessage: string = '';
+  // errorMessageEmail: string = '';
+  // errorMessagePassword: string = '';
+  // errorMessageUserName: string = '';
+  // errorMessageFirstName: string = '';
+  // errorMessageLastName: string = '';
+  // errorMessagePhone: string = '';
+  // errorMessageAddress: string = '';
+  errorMessages: {[key: string]: string} = {
+    general: '',
+    email: '',
+    password: '',
+    userName:'',
+    firstName:'',
+    lastName:'',
+    phone:'',
+    address:''
+  };
 
   constructor(private authService: AuthService, private http: HttpClient) { }
 
@@ -38,16 +48,16 @@ export class RegisterComponent implements OnInit {
 
   public validateEmail(): void {
     if (!this.email) {
-      this.errorMessageEmail = 'Please enter email.';
+      this.errorMessages['email'] = 'Please enter email.';
     } else if (!this.isEmailValid(this.email)) {
-      this.errorMessageEmail = 'Please enter a valid email address.';
+      this.errorMessages['email'] = 'Please enter a valid email address.';
     } else {
       this.checkFieldExists('email', this.email).subscribe(
         (existingEmail) => {
           if (existingEmail) {
-            this.errorMessageEmail = 'Email is already taken.';
+            this.errorMessages['email'] = 'Email is already taken.';
           } else {
-            this.errorMessageEmail = '';
+            this.errorMessages['email'] = '';
           }
         },
         (error) => {
@@ -59,16 +69,16 @@ export class RegisterComponent implements OnInit {
 
   public validateUserName(): void {
     if (!this.userName) {
-      this.errorMessageUserName = 'Please enter user name.';
+      this.errorMessages['userName'] = 'Please enter user name.';
     } else if (this.userName.length > 20) {
-      this.errorMessageUserName = 'User name must not exceed 20 characters.';
+      this.errorMessages['userName'] = 'User name must not exceed 20 characters.';
     } else {
       this.checkFieldExists('username', this.userName).subscribe(
         (existingUser) => {
           if (existingUser) {
-            this.errorMessageUserName = 'Username is already taken.';
+            this.errorMessages['userName'] = 'Username is already taken.';
           } else {
-            this.errorMessageUserName = '';
+            this.errorMessages['userName'] = '';
           }
         },
         (error) => {
@@ -83,34 +93,34 @@ export class RegisterComponent implements OnInit {
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!this.password) {
-      this.errorMessagePassword = 'Please enter password.';
+      this.errorMessages['password'] = 'Please enter password.';
     } else if (this.password.length < 8) {
-      this.errorMessagePassword = 'Password must be at least 8 characters.';
+      this.errorMessages['password'] = 'Password must be at least 8 characters.';
     } else if (!passwordRegex.test(this.password)) {
-      this.errorMessagePassword =
+      this.errorMessages['password'] =
         'Password must include at least one letter, one number, and one special character.';
     } else {
-      this.errorMessagePassword = '';
+      this.errorMessages['password'] = '';
     }
   }
 
   public validateFirstName(): void {
     if (!this.firstName) {
-      this.errorMessageFirstName = 'Please enter first name.';
+      this.errorMessages['firstName'] = 'Please enter first name.';
     } else if (this.firstName.length > 25) {
-      this.errorMessageFirstName = 'First name must not exceed 25 characters.';
+      this.errorMessages['firstName'] = 'First name must not exceed 25 characters.';
     } else {
-      this.errorMessageFirstName = '';
+      this.errorMessages['firstName'] = '';
     }
   }
 
   public validateLastName(): void {
     if (!this.lastName) {
-      this.errorMessageLastName = 'Please enter last name.';
+      this.errorMessages['lastName'] = 'Please enter last name.';
     } else if (this.lastName.length > 25) {
-      this.errorMessageLastName = 'Last name must not exceed 25 characters.';
+      this.errorMessages['lastName'] = 'Last name must not exceed 25 characters.';
     } else {
-      this.errorMessageLastName = '';
+      this.errorMessages['lastName'] = '';
     }
   }
 
@@ -118,21 +128,21 @@ export class RegisterComponent implements OnInit {
     const phoneRegex = /^\d{10}$/; // Assuming a 10-digit phone number format
 
     if (!this.phone) {
-      this.errorMessagePhone = 'Please enter phone number.';
+      this.errorMessages['phone'] = 'Please enter phone number.';
     } else if (!phoneRegex.test(this.phone)) {
-      this.errorMessagePhone = 'Please enter a valid 10-digit phone number.';
+      this.errorMessages['phone'] = 'Please enter a valid 10-digit phone number.';
     } else {
-      this.errorMessagePhone = '';
+      this.errorMessages['phone'] = '';
     }
   }
 
   public validateAddress(): void {
     if (!this.address) {
-      this.errorMessageAddress = 'Please enter address.';
+      this.errorMessages['address'] = 'Please enter address.';
     } else if (this.address.length > 100) {
-      this.errorMessageLastName = 'Address must not exceed 100 characters.';
+      this.errorMessages['address'] = 'Address must not exceed 100 characters.';
     } else {
-      this.errorMessageAddress = '';
+      this.errorMessages['address'] = '';
     }
   }
 
@@ -178,19 +188,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private hasValidationErrors(): boolean {
-    let hasValidationErrors = false;
-    if (
-      this.errorMessageUserName !== '' ||
-      this.errorMessageEmail !== '' ||
-      this.errorMessagePassword !== '' ||
-      this.errorMessageFirstName !== '' ||
-      this.errorMessageLastName !== '' ||
-      this.errorMessagePhone !== '' ||
-      this.errorMessageAddress !== ''
-    ) {
-      hasValidationErrors = true;
-    }
-    return hasValidationErrors;
+    return Object.values(this.errorMessages).some(value => value !== '');
   }
 
   private checkFieldExists(fieldName: string, fieldValue: string) {
@@ -222,6 +220,7 @@ export class RegisterComponent implements OnInit {
       return this.http.post<any>(apiUrl, user).pipe(
         catchError((error) => {
           console.error('Error adding user:', error);
+          this.errorMessages['general'] = 'Error adding user.';
           return throwError(error);
         })
       );

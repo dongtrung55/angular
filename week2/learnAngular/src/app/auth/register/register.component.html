@@ -5,43 +5,43 @@
                 <div class="card-body">
                     <h2 class="mb-3">{{ titleForm }}</h2>
                     <form (ngSubmit)="onRegister()">
-                        <div *ngIf="errorMessage" class="error-message bg-danger text-light p-2 mb-3 small">{{ errorMessage }}</div>
+                        <div *ngIf="errorMessages['general']" class="error-message bg-danger text-light p-2 mb-3 small">{{ errorMessages['general'] }}</div>
                         <div class="form-floating mb-3">
                             <label for="userName">User name</label>
                             <input class="form-control" id="userName" name="userName" type="text" placeholder="User name" [(ngModel)]="userName"  (keyup)="validateUserName()" required/>
-                            <div *ngIf="errorMessageUserName" class="small text-danger mt-1 font-italic">{{ errorMessageUserName }}</div>
+                            <div *ngIf="errorMessages['userName']" class="small text-danger mt-1 font-italic">{{ errorMessages['userName'] }}</div>
                         </div>
                         <div class="form-floating mb-3">
                             <label for="password">Password</label>
                             <input class="form-control" id="password" type="password" name="password" placeholder="Password" [(ngModel)]="password"  (keyup)="validatePassword()" required/>
-                            <div *ngIf="errorMessagePassword" class="small text-danger mt-1 font-italic">{{ errorMessagePassword }}</div>
+                            <div *ngIf="errorMessages['password']" class="small text-danger mt-1 font-italic">{{ errorMessages['password'] }}</div>
                         </div>
                         <div class="form-floating mb-3">
                             <label for="email">Email address</label>
                             <input class="form-control" id="email" name="email" type="email" placeholder="Email" [(ngModel)]="email" (keyup)="validateEmail()" required/>
-                            <div *ngIf="errorMessageEmail" class="small text-danger mt-1 font-italic">{{ errorMessageEmail }}</div>
+                            <div *ngIf="errorMessages['email']" class="small text-danger mt-1 font-italic">{{ errorMessages['email'] }}</div>
                         </div>
                         <div class="row">
                             <div class="form-floating mb-3 col-lg-6">
                                 <label for="firstName">First Name</label>
                                 <input class="form-control" id="firstName" type="text" name="firstName" placeholder="First Name" [(ngModel)]="firstName"  (keyup)="validateFirstName()" required/>
-                                <div *ngIf="errorMessageFirstName" class="small text-danger mt-1 font-italic">{{ errorMessageFirstName }}</div>
+                                <div *ngIf="errorMessages['firstName']" class="small text-danger mt-1 font-italic">{{ errorMessages['firstName'] }}</div>
                             </div>
                             <div class="form-floating mb-3 col-lg-6">
                                 <label for="lastName">Last Name</label>
                                 <input class="form-control" id="lastName" type="text" name="lastName" placeholder="Last Name" [(ngModel)]="lastName"  (keyup)="validateLastName()" required/>
-                                <div *ngIf="errorMessageLastName" class="small text-danger mt-1 font-italic">{{ errorMessageLastName }}</div>
+                                <div *ngIf="errorMessages['lastName']" class="small text-danger mt-1 font-italic">{{ errorMessages['lastName'] }}</div>
                             </div>
                         </div>
                         <div class="form-floating mb-3">
                             <label for="phone">Phone</label>
                             <input class="form-control" id="phone" name="phone" type="text" placeholder="phone" [(ngModel)]="phone"  (keyup)="validatePhone()" required/>
-                            <div *ngIf="errorMessagePhone" class="small text-danger mt-1 font-italic">{{ errorMessagePhone }}</div>
+                            <div *ngIf="errorMessages['phone']" class="small text-danger mt-1 font-italic">{{ errorMessages['phone'] }}</div>
                         </div>
                         <div class="form-floating mb-3">
                             <label for="address">Address</label>
                             <input class="form-control" id="address" name="address" type="text" placeholder="Address" [(ngModel)]="address"  (keyup)="validateAddress()" required/>
-                            <div *ngIf="errorMessageAddress" class="small text-danger mt-1 font-italic">{{ errorMessageAddress }}</div>
+                            <div *ngIf="errorMessages['address']" class="small text-danger mt-1 font-italic">{{ errorMessages['address'] }}</div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                             <button class="btn btn-primary border-" type="submit">Register</button>
