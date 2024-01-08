@@ -9,9 +9,9 @@ const routes: Routes = [
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
   { path: 'cart', loadChildren: () => import('./cart/cart/cart.module').then(m => m.CartModule) },
   { path: 'checkout', loadChildren: () => import('./cart/checkout/checkout.module').then(m => m.CheckoutModule) },
-  // { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-  // { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
-  // { path: 'forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
+  { path: 'login', loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule) },
+  { path: 'register', loadChildren: () => import('./auth/register/register.module').then(m => m.RegisterModule) },
+  { path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
   { path: '**', component: PageNotFoundComponent },
 ];
 
