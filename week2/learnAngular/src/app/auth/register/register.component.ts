@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { IUser } from '../shared/models/user';
 
 @Component({
   selector: 'app-register',
@@ -18,14 +19,6 @@ export class RegisterComponent implements OnInit {
   lastName: string = '';
   phone: string = '';
   address: string = '';
-  // errorMessage: string = '';
-  // errorMessageEmail: string = '';
-  // errorMessagePassword: string = '';
-  // errorMessageUserName: string = '';
-  // errorMessageFirstName: string = '';
-  // errorMessageLastName: string = '';
-  // errorMessagePhone: string = '';
-  // errorMessageAddress: string = '';
   errorMessages: {[key: string]: string} = {
     general: '',
     email: '',
@@ -160,7 +153,7 @@ export class RegisterComponent implements OnInit {
     }
 
     //insert user
-    let user: any = {
+    let user: IUser = {
       "username": this.userName,
       "email": this.email,
       "password": this.password,
