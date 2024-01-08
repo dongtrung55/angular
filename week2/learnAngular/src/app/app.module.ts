@@ -9,9 +9,6 @@ import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { AdminComponent } from './admin/admin.component';
-import { CartComponent } from './cart/cart/cart.component';
-import { CheckoutComponent } from './cart/checkout/checkout.component';
 import { AuthModule } from './auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -21,10 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    PageNotFoundComponent,
-    AdminComponent,
-    CartComponent,
-    CheckoutComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

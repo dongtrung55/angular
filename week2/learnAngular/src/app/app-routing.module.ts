@@ -2,24 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './auth/login/login.component';
-import { AdminComponent } from './admin/admin.component';
-import { AuthGuard } from './auth/auth.guard';
-import { CartComponent } from './cart/cart/cart.component';
-import { CheckoutComponent } from './cart/checkout/checkout.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: '', component: HomeComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'cart', component: CartComponent, canActivate: [AuthGuard] },
-  { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
-  { path: '**', component: PageNotFoundComponent }, // Wildcard route for a 404 page
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
+  { path: 'cart', loadChildren: () => import('./cart/cart/cart.module').then(m => m.CartModule) },
+  { path: 'checkout', loadChildren: () => import('./cart/checkout/checkout.module').then(m => m.CheckoutModule) },
+  // { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+  // { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule) },
+  // { path: 'forgot-password', loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

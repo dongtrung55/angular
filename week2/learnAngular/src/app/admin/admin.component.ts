@@ -51,9 +51,7 @@ export class AdminComponent implements OnInit {
     this.loadUsers();
   }
 
-  ngOnInit(): void {
-    console.log(this.users)
-  }
+  ngOnInit(): void {}
 
   private loadUsers(): void {
     this.http.get<any[]>('http://localhost:3000/users').subscribe(
