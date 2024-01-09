@@ -13,4 +13,5 @@ export interface IUser {
     updated_at: string;
     last_login: string;
     email_verified: boolean;
+    [key: string]: any;
   }

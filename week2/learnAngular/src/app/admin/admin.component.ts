@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { HttpService } from '../shared/services/http.service';
 
 @Component({
   selector: 'app-admin',
@@ -47,14 +45,14 @@ export class AdminComponent implements OnInit {
   currentPage = 1;
   isEditMode: boolean = false;
 
-  constructor(private authService: AuthService, private http: HttpClient) {
+  constructor(private authService: AuthService, private httpService: HttpService) {
     this.loadUsers();
   }
 
   ngOnInit(): void {}
 
   private loadUsers(): void {
-    this.http.get<any[]>('http://localhost:3000/users').subscribe(
+    this.httpService.loadUsers().subscribe(
       data => {
         this.users = data;
       },
@@ -75,7 +73,7 @@ export class AdminComponent implements OnInit {
     } else if (!this.isEmailValid(this.email)) {
       this.errorMessageEmail = 'Please enter a valid email address.';
     } else {
-      this.checkFieldExists('email', this.email).subscribe(
+      this.httpService.checkFieldExists('email', this.email).subscribe(
         (existingEmail) => {
           if (existingEmail && !this.isEditMode) {
             this.errorMessageEmail = 'Email is already taken.';
@@ -96,7 +94,7 @@ export class AdminComponent implements OnInit {
     } else if (this.userName.length > 20) {
       this.errorMessageUserName = 'User name must not exceed 20 characters.';
     } else {
-      this.checkFieldExists('username', this.userName).subscribe(
+      this.httpService.checkFieldExists('username', this.userName).subscribe(
         (existingUser) => {
           if (existingUser && !this.isEditMode) {
             this.errorMessageUserName = 'Username is already taken.';
@@ -203,7 +201,8 @@ export class AdminComponent implements OnInit {
     if (this.isEditMode) {
       user['role'] = this.selectedRole;
       user['id'] = this.id;
-      this.updateUser(user).subscribe(
+      
+      this.httpService.updateUser(user).subscribe(
         () => {
           this.loadUsers();
           const closeButton = document.querySelector('.modal.fade.show .close') as HTMLElement | null;
@@ -216,9 +215,9 @@ export class AdminComponent implements OnInit {
         error => {
           console.error('Error updating users:', error);
         }
-      );;
+      );
     } else {
-      this.addUser(user).subscribe(
+      this.httpService.addUser(user).subscribe(
         () => {
           console.log('Users Added successfully.');
         },
@@ -245,53 +244,6 @@ export class AdminComponent implements OnInit {
     return hasValidationErrors;
   }
 
-  private checkFieldExists(fieldName: string, fieldValue: string) {
-    const url = 'http://localhost:3000/users';
-
-    return this.http.get<any[]>(url).pipe(
-      catchError((error) => {
-        console.error('Error reading users.json:', error);
-        return throwError(error);
-      }),
-      map((users) => users.some((user) => user[fieldName] === fieldValue))
-    );
-  }
-
-  private addUser(user: any): Observable<any> {
-    const apiUrl = 'http://localhost:3000/users';
-
-    return this.http.get<any[]>(apiUrl).pipe(
-      catchError((error) => {
-        console.error('Error reading users.json:', error);
-        return throwError(error);
-      }),
-      map((users) => {
-        // Generate a new user_id
-        user.id = (users.length + 1).toString();
-        users.push(user);
-
-        // Write updated data back to the file
-        return this.http.post<any>(apiUrl, user).pipe(
-          catchError((error) => {
-            console.error('Error adding user:', error);
-            return throwError(error);
-          })
-        );
-      })
-    );
-  }
-
-  private updateUser(user: any): Observable<any> {
-    const apiUrl = 'http://localhost:3000/users/' + user.id;
-
-    return this.http.patch<any>(apiUrl, user).pipe(
-      catchError((error) => {
-        console.error('Error adding user:', error);
-        return throwError(error);
-      })
-    );
-  }
-
   public editUser(user: any): void {
     this.textTitleAddEdit = 'Edit User';
     this.textBtnAddEdit = 'Updated';
@@ -308,6 +260,8 @@ export class AdminComponent implements OnInit {
     this.selectedRole = user['role'];
     this.created_at = user['created_at'];
     this.id = user['id'];
+
+    this.resetMessError();
   }
 
   public editUserText(user: any): void {
@@ -321,12 +275,11 @@ export class AdminComponent implements OnInit {
     this.phone = '';
     this.address = '';
     this.selectedRole = 'customer';
+    this.resetMessError();
   }
 
   public removeUser(user: any): void {
-    const apiUrl = `http://localhost:3000/users/${user.id}`; // Assuming your user object has an 'id' property
-
-    this.http.delete<any[]>(apiUrl).subscribe(
+    this.httpService.removeUser(user).subscribe(
       () => {
         this.loadUsers();
         document.querySelector('.modal-backdrop.fade.show')?.remove();
@@ -361,6 +314,17 @@ export class AdminComponent implements OnInit {
 
   public onPageChange(page: number): void {
     this.currentPage = page;
+  }
+
+  private resetMessError(): void{
+    this.errorMessage = '';
+    this.errorMessageEmail = '';
+    this.errorMessagePassword = '';
+    this.errorMessageUserName = '';
+    this.errorMessageFirstName = '';
+    this.errorMessageLastName = '';
+    this.errorMessagePhone = '';
+    this.errorMessageAddress = '';
   }
 
 }

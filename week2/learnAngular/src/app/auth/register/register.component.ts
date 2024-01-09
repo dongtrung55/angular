@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
 import { IUser } from '../shared/models/user';
+import { HttpService } from '../../shared/services/http.service';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +28,7 @@ export class RegisterComponent implements OnInit {
     address:''
   };
 
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  constructor(private authService: AuthService, private httpService: HttpService) { }
 
   ngOnInit(): void { }
 
@@ -45,7 +43,7 @@ export class RegisterComponent implements OnInit {
     } else if (!this.isEmailValid(this.email)) {
       this.errorMessages['email'] = 'Please enter a valid email address.';
     } else {
-      this.checkFieldExists('email', this.email).subscribe(
+      this.httpService.checkFieldExists('email', this.email).subscribe(
         (existingEmail) => {
           if (existingEmail) {
             this.errorMessages['email'] = 'Email is already taken.';
@@ -66,7 +64,7 @@ export class RegisterComponent implements OnInit {
     } else if (this.userName.length > 20) {
       this.errorMessages['userName'] = 'User name must not exceed 20 characters.';
     } else {
-      this.checkFieldExists('username', this.userName).subscribe(
+      this.httpService.checkFieldExists('username', this.userName).subscribe(
         (existingUser) => {
           if (existingUser) {
             this.errorMessages['userName'] = 'Username is already taken.';
@@ -170,7 +168,7 @@ export class RegisterComponent implements OnInit {
       "email_verified": false
     };
 
-    this.addUser(user).subscribe(
+    this.httpService.addUser(user).subscribe(
       () => {
         console.log('Users updated successfully.');
       },
@@ -183,42 +181,5 @@ export class RegisterComponent implements OnInit {
   private hasValidationErrors(): boolean {
     return Object.values(this.errorMessages).some(value => value !== '');
   }
-
-  private checkFieldExists(fieldName: string, fieldValue: string) {
-    const url = 'http://localhost:3000/users';
-
-    return this.http.get<any[]>(url).pipe(
-      catchError((error) => {
-        console.error('Error reading users.json:', error);
-        return throwError(error);
-      }),
-      map((users) => users.some((user) => user[fieldName] === fieldValue))
-    );
-  }
-
-  private addUser(user: any): Observable<any> {
-  const apiUrl = 'http://localhost:3000/users';
-
-  return this.http.get<any[]>(apiUrl).pipe(
-    catchError((error) => {
-      console.error('Error reading users.json:', error);
-      return throwError(error);
-    }),
-    map((users) => {
-      // Generate a new user_id
-      user.id = (users.length + 2).toString();
-      users.push(user);
-
-      // Write updated data back to the file
-      return this.http.post<any>(apiUrl, user).pipe(
-        catchError((error) => {
-          console.error('Error adding user:', error);
-          this.errorMessages['general'] = 'Error adding user.';
-          return throwError(error);
-        })
-      );
-    })
-  );
-}
 
 }
