@@ -8,12 +8,12 @@ import { IUser } from '../../auth/shared/models/user';
   providedIn: 'root',
 })
 export class HttpService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrlUsers = 'http://localhost:3000/users';
 
   constructor(private http: HttpClient) {}
 
   public loadUsers(): Observable<any> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
+    return this.http.get<IUser[]>(this.apiUrlUsers).pipe(
       catchError((error) => {
         console.error('Error get user:', error);
         return throwError(error);
@@ -22,7 +22,7 @@ export class HttpService {
   }
 
   public checkFieldExists(fieldName: string, fieldValue: string): Observable<boolean> {
-    return this.http.get<IUser[]>(this.apiUrl).pipe(
+    return this.http.get<IUser[]>(this.apiUrlUsers).pipe(
       catchError((error) => {
         console.error('Error reading users.json:', error);
         return throwError(error);
@@ -32,7 +32,7 @@ export class HttpService {
   }
 
   public addUser(user: IUser): Observable<any> {
-    return this.http.get<IUser[]>(this.apiUrl).pipe(
+    return this.http.get<IUser[]>(this.apiUrlUsers).pipe(
       catchError((error) => {
         console.error('Error reading users.json:', error);
         return throwError(error);
@@ -43,7 +43,7 @@ export class HttpService {
         users.push(user);
 
         // Write updated data back to the file
-        return this.http.post<any>(this.apiUrl, user).pipe(
+        return this.http.post<IUser[]>(this.apiUrlUsers, user).pipe(
           catchError((error) => {
             console.error('Error adding user:', error);
             return throwError(error);
@@ -54,7 +54,7 @@ export class HttpService {
   }
 
   public updateUser(user: any): Observable<any> {
-    return this.http.patch<any>(this.apiUrl +'/'+ user.id, user).pipe(
+    return this.http.patch<IUser[]>(this.apiUrlUsers +'/'+ user.id, user).pipe(
       catchError((error) => {
         console.error('Error adding user:', error);
         return throwError(error);
@@ -63,7 +63,7 @@ export class HttpService {
   }
 
   public removeUser(user: any): Observable<any> {
-    return this.http.delete<any[]>(this.apiUrl + '/' +user.id).pipe(
+    return this.http.delete<IUser[]>(this.apiUrlUsers + '/' +user.id).pipe(
       catchError((error) => {
         console.error('Error remove user:', error);
         return throwError(error);

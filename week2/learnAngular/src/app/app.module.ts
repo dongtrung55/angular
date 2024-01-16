@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { AuthModule } from './auth/auth.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FilterPipe } from './shared/pipes/filter.pipe';
+import { BooksModule } from './books/books.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { FilterPipe } from './shared/pipes/filter.pipe';
     HttpClientModule,
     FormsModule,
     AuthModule,
+    BooksModule,
     BrowserAnimationsModule
   ],
   providers: [],

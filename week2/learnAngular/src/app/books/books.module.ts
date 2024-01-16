@@ -1,9 +1,9 @@
+// books.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BooksRoutingModule } from './books-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
-
-
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
     BookDetailComponent
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    BooksRoutingModule
+  ],
 })
-export class BooksModule { }
+export class BooksModule {}
