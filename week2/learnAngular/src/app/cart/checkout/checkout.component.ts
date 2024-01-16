@@ -14,10 +14,8 @@ export class CheckoutComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartService.cartItems$.subscribe((items) => {
-      this.cartItems = items;
-      this.calculateTotal();
-    });
+    this.cartItems = this.cartService.getCartItems();
+    this.calculateTotal();
 
     const userString = localStorage.getItem('currentUser');
     if (userString) {
