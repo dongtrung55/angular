@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BookService } from '../books.service';
+import { CartService } from '../../cart/cart/cart.service';
+import { Book } from '../book';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss']
+  styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent {
   books: any[] = [];
@@ -14,7 +16,11 @@ export class BookListComponent {
   selectedSort: string = '';
   notFound: boolean = false;
 
-  constructor(private router: Router, private bookService: BookService) {}
+  constructor(
+    private router: Router,
+    private bookService: BookService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.getBooks();
@@ -34,7 +40,7 @@ export class BookListComponent {
       this.books = books;
       this.notFound = false;
       if (books.length === 0) {
-       this.notFound = true;
+        this.notFound = true;
       }
     });
   }
@@ -44,6 +50,11 @@ export class BookListComponent {
       this.books = books;
     });
     this.selectedSort = property;
+  }
+
+  addToCart(book: Book[]): void {
+    this.cartService.addToCart(book);
+    this.cartService.updateCartItems(book);
   }
 
   get totalPages(): number {
@@ -69,5 +80,4 @@ export class BookListComponent {
   public onPageChange(page: number): void {
     this.currentPage = page;
   }
-
 }

@@ -55,9 +55,9 @@
                     <i class="fas fa-heart text-primary"></i>
                     <span class="badge">0</span>
                 </a>
-                <a href="" class="btn border">
+                <a [routerLink]="['/cart']" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge">{{ cartItemCount }}</span>
                 </a>
             </div>
         </div>
@@ -80,7 +80,8 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a [routerLink]="['/home']" [routerLinkActive]="'active'" class="nav-item nav-link">Home</a>
-                            <a [routerLink]="['/books']" [routerLinkActive]="'active'" class="nav-item nav-link">Shop</a>
+                            <a [routerLink]="['/books']" [routerLinkActive]="'active'"
+                                class="nav-item nav-link">Shop</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -102,14 +103,16 @@
                         </div>
                         <div class="navbar-nav ml-auto py-0" *ngIf="isLoggedIn$ | async as isLoggedIn">
                             <div class="nav-item dropdown admin-bar-my-account">
-                                <a href="#" class="nav-link dropdown-toggle dropdown-toggle-custom" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Hi, {{ name | uppercase }}</a>
+                                <a href="#" class="nav-link dropdown-toggle dropdown-toggle-custom" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hi, {{ name |
+                                    uppercase }}</a>
                                 <ul class="dropdown-menu rounded-0 m-0">
                                     <li><a [routerLink]="['/profile']" class="dropdown-item"
-                                        [routerLinkActive]="'active'">Profile</a></li>
+                                            [routerLinkActive]="'active'">Profile</a></li>
                                     <li *ngIf="isAdmin()"><a [routerLink]="['/admin']" class="dropdown-item"
-                                        [routerLinkActive]="'active'">Admin</a></li>
-                                    <li><a [routerLink]="['/logout']" class="dropdown-item" (click)="logout()">Logout</a></li>
+                                            [routerLinkActive]="'active'">Admin</a></li>
+                                    <li><a [routerLink]="['/logout']" class="dropdown-item"
+                                            (click)="logout()">Logout</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { CartService } from '../../cart/cart/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,7 @@ export class HeaderComponent implements OnInit {
   name: string | null = null;
   public isLoggedIn$: Observable<boolean> = new Observable<boolean>;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private cartService: CartService) { }
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.authService.isLoggedIn();
@@ -30,5 +31,9 @@ export class HeaderComponent implements OnInit {
 
   public isAdmin(): boolean {
     return this.authService.getUserRoles().includes('admin');
+  }
+
+  get cartItemCount(): number {
+    return this.cartService.getCartItems().length;
   }
 }
