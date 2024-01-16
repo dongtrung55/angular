@@ -12,6 +12,7 @@ export class BookListComponent {
   itemsPerPage = 6;
   currentPage = 1;
   selectedSort: string = '';
+  notFound: boolean = false;
 
   constructor(private router: Router, private bookService: BookService) {}
 
@@ -31,6 +32,10 @@ export class BookListComponent {
   searchBooksByTitle(title: string): void {
     this.bookService.searchBooksByTitle(title).subscribe((books) => {
       this.books = books;
+      this.notFound = false;
+      if (books.length === 0) {
+       this.notFound = true;
+      }
     });
   }
 

@@ -38,6 +38,10 @@
                     </div>
                 </div>
 
+                <div *ngIf="notFound" class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                    <p class="font-weight-medium">No suitable books found!</p>
+                </div>
+
                 <div class="col-lg-4 col-md-6 col-sm-12 pb-1" *ngFor="let book of paginatedBooks;">
                     <div class="card product-item border-0 mb-4">
                         <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
