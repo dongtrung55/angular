@@ -24,6 +24,16 @@ export class BookService {
     );
   }
 
+  public getBookById(bookId: number): Observable<Book> {
+    const url = `${this.apiUrlBooks}/${bookId}`;
+    return this.http.get<Book>(url).pipe(
+      catchError((error) => {
+        console.error(`Error getting book with ID ${bookId}:`, error);
+        return throwError(error);
+      })
+    );
+  }
+
   public searchBooksByTitle(title: string): Observable<Book[]> {
     if (!title || title === "") {
       return this.getBooks();

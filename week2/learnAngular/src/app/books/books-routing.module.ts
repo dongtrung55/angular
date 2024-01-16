@@ -10,7 +10,7 @@ const routes: Routes = [
     component: BookListComponent,
     children: [
       {
-        path: 'detail',
+        path: 'detail/:id',
         component: BookDetailComponent
       }
     ]
