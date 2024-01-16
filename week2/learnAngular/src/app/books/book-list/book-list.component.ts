@@ -9,7 +9,7 @@ import { BookService } from '../books.service';
 })
 export class BookListComponent {
   books: any[] = [];
-  itemsPerPage = 3;
+  itemsPerPage = 6;
   currentPage = 1;
   selectedSort: string = '';
 
