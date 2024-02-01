@@ -30,7 +30,9 @@ export class CartComponent implements OnInit {
   }
 
   incrementQuantity(item: any): void {
-    item.cart_quantity++;
+    if(item.quantity > item.cart_quantity){
+      item.cart_quantity++;
+    }
     this.updateCart();
   }
 
@@ -39,6 +41,7 @@ export class CartComponent implements OnInit {
     if (index !== -1) {
       this.cartItems.splice(index, 1);
       this.updateCart();
+      this.cartService.updateCartItemCount();
     }
   }
 
@@ -53,10 +56,11 @@ export class CartComponent implements OnInit {
   private updateCart(): void {
     this.cartService.updateCartItemCount();
     this.cartService.saveCartToStorage();
+    this.calculateTotal();
   }
 
   calculateTotal(): void {
-    this.total = this.cartItems.reduce((sum, item) => sum + item.price * item.cart_quantity, 0);
+    this.total = this.cartItems.reduce((sum, item) => sum + (item.salePrice > 0 ? item.salePrice : item.price) * item.cart_quantity, 0);
   }
 
   proceedToCheckout(): void {

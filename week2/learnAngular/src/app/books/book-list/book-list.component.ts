@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { BookService } from '../books.service';
+import { AuthService } from 'src/app/auth/auth.service';
 import { CartService } from '../../cart/cart/cart.service';
 import { Book } from '../book';
 
@@ -10,14 +10,16 @@ import { Book } from '../book';
   styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent {
-  books: any[] = [];
+  books!: Book[];
   itemsPerPage = 6;
   currentPage = 1;
   selectedSort: string = '';
   notFound: boolean = false;
+  isEditMode = false;
+  textSuccess: string = '';
 
   constructor(
-    private router: Router,
+    private authService: AuthService,
     private bookService: BookService,
     private cartService: CartService
   ) {}
@@ -57,6 +59,24 @@ export class BookListComponent {
     this.cartService.updateCartItems(book);
   }
 
+  addOrUpdateBook(book: Book): void {
+    if (book) {
+      this.bookService.updateBook(book.id, book).subscribe(() => {
+        this.getBooks();
+      });
+    } else {
+      this.bookService.addBook(book).subscribe(() => {
+        this.getBooks();
+      });
+    }
+  }
+
+  deleteBook(id: number): void {
+    this.bookService.deleteBook(id).subscribe(() => {
+      this.getBooks();
+    });
+  }
+
   get totalPages(): number {
     return Math.ceil(this.books.length / this.itemsPerPage);
   }
@@ -79,5 +99,9 @@ export class BookListComponent {
 
   public onPageChange(page: number): void {
     this.currentPage = page;
+  }
+
+  public isAdmin(): boolean {
+    return this.authService.getUserRoles().includes('admin');
   }
 }
