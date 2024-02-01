@@ -8,13 +8,11 @@ const routes: Routes = [
   {
     path: '',
     component: BookListComponent,
-    children: [
-      {
-        path: 'detail/:id',
-        component: BookDetailComponent
-      }
-    ]
-  }
+  },
+  {
+    path: 'detail/:id',
+    component: BookDetailComponent,
+  },
 ];
 
 @NgModule({
