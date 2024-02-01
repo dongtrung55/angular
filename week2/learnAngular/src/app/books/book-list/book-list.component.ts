@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookService } from '../books.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CartService } from '../../cart/cart/cart.service';
@@ -11,6 +12,7 @@ import { Book } from '../book';
 })
 export class BookListComponent {
   books!: Book[];
+  bookForm!: FormGroup;
   itemsPerPage = 6;
   currentPage = 1;
   selectedSort: string = '';
@@ -19,6 +21,7 @@ export class BookListComponent {
   textSuccess: string = '';
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private bookService: BookService,
     private cartService: CartService
@@ -28,6 +31,27 @@ export class BookListComponent {
     this.getBooks();
     this.bookService.searchTitle.subscribe((title) => {
       this.searchBooksByTitle(title);
+    });
+    this.initializeForm();
+  }
+
+  initializeForm(): void {
+    this.bookForm = this.fb.group({
+      id: [null],
+      title: ['', Validators.required],
+      subtitle: [''],
+      author: [''],
+      published: [''],
+      publisher: [''],
+      image: [''],
+      pages: [''],
+      price: [''],
+      rate: [''],
+      salePrice: [''],
+      quantity: [''],
+      categories: [''],
+      description: [''],
+      website: [''],
     });
   }
 
@@ -59,16 +83,35 @@ export class BookListComponent {
     this.cartService.updateCartItems(book);
   }
 
-  addOrUpdateBook(book: Book): void {
+  openModal(book?: Book): void {
     if (book) {
-      this.bookService.updateBook(book.id, book).subscribe(() => {
-        this.getBooks();
-      });
+      this.isEditMode = true;
+      this.bookForm.setValue(book);
     } else {
-      this.bookService.addBook(book).subscribe(() => {
-        this.getBooks();
-      });
+      this.isEditMode = false;
+      this.bookForm.reset();
     }
+  }
+
+  submitForm(): void {
+    if (this.isEditMode) {
+      this.updateBook();
+    } else {
+      this.addBook();
+    }
+  }
+
+  addBook(): void {
+    this.bookService.addBook(this.bookForm.value).subscribe(() => {
+      this.getBooks();
+    });
+  }
+
+  updateBook(): void {
+    const id = this.bookForm.value.id;
+    this.bookService.updateBook(id, this.bookForm.value).subscribe(() => {
+      this.getBooks();
+    });
   }
 
   deleteBook(id: number): void {

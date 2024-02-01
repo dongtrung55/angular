@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Book } from './book';
 
 @Injectable({
@@ -59,7 +59,14 @@ export class BookService {
   }
 
   public addBook(book: Book): Observable<Book> {
-    return this.http.post<Book>(this.apiUrlBooks, book);
+    book.published = new Date();
+    book.rate = 0;
+    return this.getNextBookId().pipe(
+      switchMap(nextId => {
+        book.id = nextId;
+        return this.http.post<Book>(this.apiUrlBooks, book);
+      })
+    );
   }
 
   public updateBook(id: number, book: Book): Observable<Book> {
@@ -70,4 +77,12 @@ export class BookService {
     return this.http.delete<void>(`${this.apiUrlBooks}/${id}`);
   }
 
+  getNextBookId(): Observable<number> {
+    return this.http.get<any[]>(this.apiUrlBooks).pipe(
+      map(books => {
+        const maxId = Math.max(...books.map(book => book.id));
+        return maxId + 1;
+      })
+    );
+  }
 }
