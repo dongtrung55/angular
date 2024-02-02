@@ -25,7 +25,7 @@ export class BookListComponent {
     private authService: AuthService,
     private bookService: BookService,
     private cartService: CartService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getBooks();
@@ -39,18 +39,18 @@ export class BookListComponent {
     this.bookForm = this.fb.group({
       id: [null],
       title: ['', Validators.required],
-      subtitle: [''],
+      subtitle: ['', Validators.required],
       author: [''],
       published: [''],
-      publisher: [''],
-      image: [''],
+      publisher: ['', Validators.required],
+      image: ['', Validators.required],
       pages: [''],
-      price: [''],
+      price: ['', Validators.required],
       rate: [''],
       salePrice: [''],
-      quantity: [''],
+      quantity: ['', Validators.required],
       categories: [''],
-      description: [''],
+      description: ['', Validators.required],
       website: [''],
     });
   }
@@ -104,6 +104,9 @@ export class BookListComponent {
   addBook(): void {
     this.bookService.addBook(this.bookForm.value).subscribe(() => {
       this.getBooks();
+      document.getElementById('cancel')?.click();
+      this.textSuccess = 'Add successfully';
+      document.getElementById('showSuccess')?.click();
     });
   }
 
@@ -111,12 +114,18 @@ export class BookListComponent {
     const id = this.bookForm.value.id;
     this.bookService.updateBook(id, this.bookForm.value).subscribe(() => {
       this.getBooks();
+      document.getElementById('cancel')?.click();
+      this.textSuccess = 'Update successfully';
+      document.getElementById('showSuccess')?.click();
     });
   }
 
   deleteBook(id: number): void {
     this.bookService.deleteBook(id).subscribe(() => {
       this.getBooks();
+      document.querySelector('.modal-backdrop.fade.show')?.remove();
+      this.textSuccess = 'Deleted successfully';
+      document.getElementById('showSuccess')?.click();
     });
   }
 
