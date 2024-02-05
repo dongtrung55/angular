@@ -54,7 +54,7 @@ export class CartComponent implements OnInit {
   }
 
   private updateCart(): void {
-    this.cartService.updateCartItemCount();
+    this.cartService.updateCartItems();
     this.cartService.saveCartToStorage();
     this.calculateTotal();
   }

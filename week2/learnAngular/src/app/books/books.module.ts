@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BooksRoutingModule } from './books-routing.module';
+import { FormsModule } from '@angular/forms';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { AppComponent } from '../app.component';
@@ -17,7 +18,8 @@ import { AppComponent } from '../app.component';
     CommonModule,
     BooksRoutingModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    FormsModule
   ],
   bootstrap: [AppComponent]
 })

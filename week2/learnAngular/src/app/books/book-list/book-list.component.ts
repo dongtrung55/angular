@@ -13,8 +13,6 @@ import { Book } from '../book';
 export class BookListComponent {
   books!: Book[];
   bookForm!: FormGroup;
-  itemsPerPage = 6;
-  currentPage = 1;
   selectedSort: string = '';
   notFound: boolean = false;
   isEditMode = false;
@@ -78,9 +76,8 @@ export class BookListComponent {
     this.selectedSort = property;
   }
 
-  addToCart(book: Book[]): void {
-    this.cartService.addToCart(book);
-    this.cartService.updateCartItems(book);
+  addToCart(item: Book): void {
+    this.cartService.addToCart(item, 1);
   }
 
   openModal(book?: Book): void {
@@ -127,30 +124,6 @@ export class BookListComponent {
       this.textSuccess = 'Deleted successfully';
       document.getElementById('showSuccess')?.click();
     });
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.books.length / this.itemsPerPage);
-  }
-
-  get startIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage;
-  }
-
-  get endIndex(): number {
-    return this.startIndex + this.itemsPerPage;
-  }
-
-  get paginatedBooks(): any[] {
-    return this.books.slice(this.startIndex, this.endIndex);
-  }
-
-  get pages(): number[] {
-    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
-  }
-
-  public onPageChange(page: number): void {
-    this.currentPage = page;
   }
 
   public isAdmin(): boolean {
