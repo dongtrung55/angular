@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams  } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Book } from './book';
@@ -39,8 +39,9 @@ export class BookService {
       return this.getBooks();
     }
 
-    const url = `${this.apiUrlBooks}?title_like=${title}`;
-    return this.http.get<Book[]>(url).pipe(
+    const params = new HttpParams().set('title_like', title);
+
+    return this.http.get<Book[]>(this.apiUrlBooks, { params }).pipe(
       catchError((error) => {
         console.error(`Error searching books by title ${title}:`, error);
         return throwError(error);
@@ -49,8 +50,9 @@ export class BookService {
   }
 
   public sortBooksByProperty(property: string): Observable<Book[]> {
-    const url = `${this.apiUrlBooks}?_sort=${property}`;
-    return this.http.get<Book[]>(url).pipe(
+    const params = new HttpParams().set('_sort', property);
+
+    return this.http.get<Book[]>(this.apiUrlBooks, { params }).pipe(
       catchError((error) => {
         console.error(`Error sorting books by property ${property}:`, error);
         return throwError(error);
